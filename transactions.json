@@ -1,0 +1,17 @@
+[
+    {
+        "amount": "50000.0",
+        "category": "Salary",
+        "type": "income"
+    },
+    {
+        "amount": "1000.0",
+        "category": "Food",
+        "type": "expense"
+    },
+    {
+        "amount": "2500.0",
+        "category": "Travel",
+        "type": "expense"
+    }
+]

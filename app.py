@@ -2,23 +2,37 @@ import argparse
 import time
 import logging
 
+from io_manager import (
+    save_transaction,
+    import_csv,
+    export_json,
+    calculate_totals,
+    bulk_import
+)
+
+
 logging.basicConfig(
     filename="app.log",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+
 class TransactionError(Exception):
     pass
+
 
 class InvalidAmountError(TransactionError):
     pass
 
+
 class InvalidCategoryError(TransactionError):
     pass
 
+
 class BudgetExceededError(TransactionError):
     pass
+
 
 def timer(func):
 
@@ -39,7 +53,7 @@ def timer(func):
     return wrapper
 
 
-def validate_input(func):
+def validate_expense(func):
 
     def wrapper(*args, **kwargs):
 
@@ -53,19 +67,16 @@ def validate_input(func):
         ]
 
         if amount <= 0:
-
             raise InvalidAmountError(
                 "Amount must be greater than 0"
             )
 
         if category not in VALID_CATEGORIES:
-
             raise InvalidCategoryError(
                 f"Invalid category: {category}"
             )
 
         if category == "Food" and amount > 5000:
-
             raise BudgetExceededError(
                 "Food budget exceeded"
             )
@@ -74,16 +85,35 @@ def validate_input(func):
 
     return wrapper
 
+
+def validate_income(func):
+
+    def wrapper(*args, **kwargs):
+
+        amount = args[0]
+
+        if amount <= 0:
+            raise InvalidAmountError(
+                "Amount must be greater than 0"
+            )
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 class Category:
 
     def __init__(self, name):
         self.name = name
+
 
 class Budget:
 
     def __init__(self, category, limit):
         self.category = category
         self.limit = limit
+
 
 class Transaction:
 
@@ -103,6 +133,7 @@ class Transaction:
             f"{self.transaction_type}: ₹{self.amount} ({self.category})"
         )
 
+
 food = Category("Food")
 
 food_budget = Budget(
@@ -110,16 +141,8 @@ food_budget = Budget(
     5000
 )
 
-expense_transaction = Transaction(
-    1000,
-    food.name,
-    "expense"
-)
 
-income = 50000
-expense = 10000
-
-@validate_input
+@validate_expense
 def add_expense(
     amount,
     category
@@ -133,7 +156,14 @@ def add_expense(
 
     expense.display()
 
-@validate_input
+    save_transaction(expense)
+
+    logging.info(
+        f"Expense Added: {amount} - {category}"
+    )
+
+
+@validate_income
 def add_income(
     amount,
     source
@@ -147,16 +177,34 @@ def add_income(
 
     income.display()
 
+    save_transaction(income)
+
+    logging.info(
+        f"Income Added: {amount} - {source}"
+    )
+
+
 @timer
 def show_report():
 
-    print("------ Finance Report ------")
+    income, expense = calculate_totals()
 
-    print(f"Total Income  : ₹{income}")
+    print(
+        "------ Finance Report ------"
+    )
 
-    print(f"Total Expense : ₹{expense}")
+    print(
+        f"Total Income  : ₹{income}"
+    )
 
-    print(f"Balance       : ₹{income - expense}")
+    print(
+        f"Total Expense : ₹{expense}"
+    )
+
+    print(
+        f"Balance       : ₹{income - expense}"
+    )
+
 
 parser = argparse.ArgumentParser(
     description="Personal Finance Tracker"
@@ -165,6 +213,7 @@ parser = argparse.ArgumentParser(
 subparsers = parser.add_subparsers(
     dest="command"
 )
+
 
 expense_parser = subparsers.add_parser(
     "add-expense",
@@ -184,6 +233,7 @@ expense_parser.add_argument(
     help="Expense category"
 )
 
+
 income_parser = subparsers.add_parser(
     "add-income",
     help="Add new income"
@@ -200,6 +250,7 @@ income_parser.add_argument(
     required=True
 )
 
+
 subparsers.add_parser(
     "balance",
     help="Show current balance"
@@ -210,49 +261,98 @@ subparsers.add_parser(
     help="Show finance report"
 )
 
-args = parser.parse_args()
+subparsers.add_parser(
+    "import-csv",
+    help="View all transactions"
+)
 
-try:
+subparsers.add_parser(
+    "export-json",
+    help="Export CSV data to JSON"
+)
 
-    if args.command == "add-expense":
+bulk_parser = subparsers.add_parser(
+    "bulk-import",
+    help="Bulk import transactions from CSV"
+)
 
-        add_expense(
-            args.amount,
-            args.category
-        )
+bulk_parser.add_argument(
+    "--file",
+    required=True,
+    help="CSV file path"
+)
 
-    elif args.command == "add-income":
+def main():
 
-        add_income(
-            args.amount,
-            args.source
-        )
+    args = parser.parse_args()
 
-    elif args.command == "balance":
+    try:
 
-        print("Income:", income)
-        print("Expense:", expense)
+        if args.command == "add-expense":
 
-        balance = income - expense
+            add_expense(
+                args.amount,
+                args.category
+            )
+
+        elif args.command == "add-income":
+
+            add_income(
+                args.amount,
+                args.source
+            )
+
+        elif args.command == "balance":
+
+            income, expense = calculate_totals()
+
+            print(
+                f"Income: ₹{income}"
+            )
+
+            print(
+                f"Expense: ₹{expense}"
+            )
+
+            print(
+                f"Current Balance: ₹{income - expense}"
+            )
+
+        elif args.command == "report":
+
+            show_report()
+
+        elif args.command == "import-csv":
+
+            transactions = import_csv()
+
+            for transaction in transactions:
+                print(transaction)
+
+        elif args.command == "export-json":
+
+            export_json()
+
+        elif args.command == "bulk-import":
+
+            bulk_import(
+                args.file,
+                add_income,
+                add_expense
+            )    
+
+        else:
+
+            parser.print_help()
+
+    except TransactionError as e:
+
+        logging.error(str(e))
 
         print(
-            "Current Balance:",
-            balance
+            f"Transaction Error: {e}"
         )
 
-    elif args.command == "report":
 
-        show_report()
-
-    else:
-
-        parser.print_help()
-
-except TransactionError as e:
-
-    logging.error(str(e))
-
-    print(
-        f"Transaction Error: {e}"
-    )
-    
+if __name__ == "__main__":
+    main()
