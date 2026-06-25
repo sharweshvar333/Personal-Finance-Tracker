@@ -1,23 +1,19 @@
-from database import Session
+from database import SessionLocal
 from models import Transaction
 
-session = Session()
+session = SessionLocal()
 
-transactions = session.query(
-    Transaction
-).all()
+transactions = session.query(Transaction).all()
 
-for txn in transactions:
-
+for transaction in transactions:
     print(
-        txn.id,
-        txn.amount,
-        txn.category,
-        txn.transaction_type
+        transaction.id,
+        transaction.amount,
+        transaction.category,
+        transaction.transaction_type,
+        transaction.date
     )
 
-count = session.query(
-    Transaction
-).count()
+print(f"\nTotal Records: {len(transactions)}")
 
-print(f"Total Records: {count}")
+session.close()
