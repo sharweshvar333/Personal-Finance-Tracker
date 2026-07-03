@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">📊 Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                Spending by Category
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                Monthly Expense Trend
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+window.onload = function () {
+
+    console.log("Chart =", typeof Chart);
+
+    const categoryLabels = {{ category_labels|tojson }};
+    const categoryValues = {{ category_values|tojson }};
+
+    const monthLabels = {{ month_labels|tojson }};
+    const monthValues = {{ month_values|tojson }};
+
+    new Chart(document.getElementById("categoryChart"), {
+        type: "doughnut",
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                data: categoryValues
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("monthlyChart"), {
+        type: "bar",
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: "Expense",
+                data: monthValues
+            }]
+        }
+    });
+
+};
+</script>
+{% endblock %}

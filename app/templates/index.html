@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+
+<h1 class="display-4">
+    💰 Personal Finance Tracker
+</h1>
+
+<p class="lead">
+    Manage your income, expenses and monthly budgets.
+</p>
+
+</div>
+
+{% if current_user.is_authenticated %}
+
+<div class="card shadow mb-4">
+
+<div class="card-body text-center">
+
+    <h3>
+        Welcome, {{ current_user.username }} 👋
+    </h3>
+
+    <p class="text-muted">
+        You're successfully logged in.
+    </p>
+
+    <a href="{{ url_for('transactions.transactions_home') }}"
+       class="btn btn-primary">
+        View Transactions
+    </a>
+
+    <a href="/budget"
+       class="btn btn-success">
+        View Budget
+    </a>
+
+    <a href="{{ url_for('auth.logout') }}"
+       class="btn btn-danger">
+        Logout
+    </a>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-3 mb-3">
+
+    <div class="card border-success shadow">
+
+        <div class="card-body text-center">
+
+            <h5>Total Income</h5>
+
+            <h3 class="text-success">
+                ₹{{ "%.2f"|format(total_income) }}
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-3">
+
+    <div class="card border-danger shadow">
+
+        <div class="card-body text-center">
+
+            <h5>Total Expense</h5>
+
+            <h3 class="text-danger">
+                ₹{{ "%.2f"|format(total_expense) }}
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-3">
+
+    <div class="card border-primary shadow">
+
+        <div class="card-body text-center">
+
+            <h5>Balance</h5>
+
+            <h3 class="text-primary">
+                ₹{{ "%.2f"|format(balance) }}
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-3 mb-3">
+
+    <div class="card border-warning shadow">
+
+        <div class="card-body text-center">
+
+            <h5>Expense (USD)</h5>
+
+            <h3 class="text-warning">
+                ${{ "%.2f"|format(total_expense_usd) }}
+            </h3>
+
+            <small class="text-muted">
+                1 INR = {{ usd_rate }} USD
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% else %}
+
+<div class="card shadow">
+
+<div class="card-body text-center">
+
+    <h3>Welcome!</h3>
+
+    <p class="text-muted">
+        Please login or register to continue.
+    </p>
+
+    <a href="{{ url_for('auth.login') }}"
+       class="btn btn-primary">
+        Login
+    </a>
+
+    <a href="{{ url_for('auth.register') }}"
+       class="btn btn-success">
+        Register
+    </a>
+
+</div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

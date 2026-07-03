@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  finance-tracker:
+    build: .
+    container_name: finance_tracker
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    volumes:
+      - .:/app
+
+    restart: unless-stopped
+    

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    📂 Import Transactions
+</h2>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Choose CSV File
+                </label>
+
+                <input
+                    type="file"
+                    name="csv_file"
+                    accept=".csv"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                Upload CSV
+
+            </button>
+
+        </form>
+
+        {% if preview %}
+
+        <hr>
+
+        <h4 class="mt-4">
+            Preview (First 5 Rows)
+        </h4>
+
+        <div class="table-responsive">
+            {{ preview | safe }}
+        </div>
+
+        <form method="POST" class="mt-3">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}">
+
+            <button
+                type="submit"
+                name="confirm_import"
+                class="btn btn-success">
+
+                ✅ Confirm Import
+
+            </button>
+
+        </form>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

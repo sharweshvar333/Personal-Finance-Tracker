@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <!-- Export Buttons -->
+        <div class="mb-3 text-end">
+
+            <a href="{{ url_for('transactions.export_transactions') }}"
+               class="btn btn-success">
+                📥 Export CSV
+            </a>
+
+            <a href="{{ url_for('transactions.export_pdf') }}"
+               class="btn btn-danger ms-2">
+                📄 Generate PDF
+            </a>
+
+        </div>
+
+        <!-- Add Transaction Card -->
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    Add Transaction
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.amount.label(class="form-label") }}
+                        {{ form.amount(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.category.label(class="form-label") }}
+                        {{ form.category(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.transaction_type.label(class="form-label") }}
+                        {{ form.transaction_type(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.date.label(class="form-label") }}
+                        {{ form.date(class="form-control") }}
+                    </div>
+
+                    {{ form.submit(class="btn btn-success w-100") }}
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr class="my-5">
+
+<h3 class="mb-3">
+    Existing Transactions
+</h3>
+
+<!-- SEARCH BAR -->
+<div class="row mb-3">
+
+    <div class="col-md-6">
+
+        <input
+            type="text"
+            id="searchBox"
+            class="form-control"
+            placeholder="🔍 Search Category..."
+            value="{{ request.args.get('search', '') }}">
+
+    </div>
+
+</div>
+
+<!-- FILTER FORM -->
+<form method="GET" class="row g-3 mb-4">
+
+    <div class="col-md-4">
+
+        <label class="form-label">
+            Category
+        </label>
+
+        <select name="category" class="form-select">
+
+            <option value="">All Categories</option>
+
+            <option value="Food"
+                {% if request.args.get('category') == 'Food' %}selected{% endif %}>
+                Food
+            </option>
+
+            <option value="Shopping"
+                {% if request.args.get('category') == 'Shopping' %}selected{% endif %}>
+                Shopping
+            </option>
+
+            <option value="Travel"
+                {% if request.args.get('category') == 'Travel' %}selected{% endif %}>
+                Travel
+            </option>
+
+            <option value="Salary"
+                {% if request.args.get('category') == 'Salary' %}selected{% endif %}>
+                Salary
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <label class="form-label">
+            Start Date
+        </label>
+
+        <input
+            type="date"
+            name="start_date"
+            value="{{ request.args.get('start_date','') }}"
+            class="form-control">
+
+    </div>
+
+    <div class="col-md-3">
+
+        <label class="form-label">
+            End Date
+        </label>
+
+        <input
+            type="date"
+            name="end_date"
+            value="{{ request.args.get('end_date','') }}"
+            class="form-control">
+
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+
+        <button class="btn btn-primary w-100">
+            Filter
+        </button>
+
+    </div>
+
+</form>
+
+<table class="table table-bordered table-striped table-hover">
+
+    <thead class="table-dark">
+
+        <tr>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Date</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for transaction in transactions.items %}
+
+        <tr>
+
+            <td>₹{{ "%.2f"|format(transaction.amount) }}</td>
+            <td>{{ transaction.category }}</td>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.date }}</td>
+
+        </tr>
+
+    {% else %}
+
+        <tr>
+
+            <td colspan="4" class="text-center">
+                No transactions found.
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        {% if transactions.has_prev %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="{{ url_for(
+                    'transactions.transactions_home',
+                    page=transactions.prev_num,
+                    category=request.args.get('category'),
+                    start_date=request.args.get('start_date'),
+                    end_date=request.args.get('end_date'),
+                    search=request.args.get('search')
+               ) }}">
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        <li class="page-item active">
+
+            <span class="page-link">
+                {{ transactions.page }}
+            </span>
+
+        </li>
+
+        {% if transactions.has_next %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="{{ url_for(
+                    'transactions.transactions_home',
+                    page=transactions.next_num,
+                    category=request.args.get('category'),
+                    start_date=request.args.get('start_date'),
+                    end_date=request.args.get('end_date'),
+                    search=request.args.get('search')
+               ) }}">
+                Next
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+<script>
+
+const searchBox = document.getElementById("searchBox");
+
+let timer;
+
+searchBox.addEventListener("keyup", function () {
+
+    clearTimeout(timer);
+
+    timer = setTimeout(function () {
+
+        const params = new URLSearchParams(window.location.search);
+
+        if (searchBox.value.trim() === "") {
+            params.delete("search");
+        } else {
+            params.set("search", searchBox.value);
+        }
+
+        window.location.search = params.toString();
+
+    }, 400);
+
+});
+
+</script>
+
+{% endblock %}
