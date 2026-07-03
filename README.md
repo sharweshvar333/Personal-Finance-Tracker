@@ -1,30 +1,108 @@
-# Personal Finance Tracker
+# 💰 Personal Finance Tracker
 
-A Flask-based Personal Finance Tracker built during my internship.
+A Flask-based Personal Finance Tracker developed as part of my internship project.
+
+---
 
 ## Features
 
-- User Authentication
-- Add Income & Expenses
+- User Registration & Login
+- Income & Expense Tracking
 - Budget Management
-- Dashboard
-- Reports (CSV & PDF)
+- Dashboard with Charts
+- Monthly Summary
+- CSV Import & Export
+- PDF Report Generation
 - REST API
+- Exchange Rate Integration
 - Rate Limiting
 - Docker Support
 - Gunicorn Deployment
 
-## Technologies
+---
+
+## Tech Stack
 
 - Python
 - Flask
 - SQLAlchemy
 - SQLite
+- Flask-Login
+- Flask-WTF
+- Bootstrap
 - Docker
-- GitHub
+- Gunicorn
+- Git & GitHub
 
-## Run
+---
+
+## Project Structure
+
+```
+app/
+│
+├── blueprints/
+├── services/
+├── templates/
+├── static/
+├── extensions.py
+└── __init__.py
+
+tests/
+docs/
+run.py
+config.py
+requirements.txt
+Dockerfile
+docker-compose.yml
+```
+
+---
+
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/sharweshvar333/Personal-Finance-Tracker.git
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application
 
 ```bash
 python run.py
 ```
+
+---
+
+## Docker
+
+Build and start
+
+```bash
+docker compose up --build
+```
+
+---
+
+## Testing
+
+Run tests
+
+```bash
+pytest
+```
+
+---
+
+## Author
+
+Sharweshvar P
+
+Internship Project – Personal Finance Tracker
