@@ -8,7 +8,6 @@ from app.blueprints.auth import auth_bp
 
 from app.scheduler import start_scheduler
 
-from models import User, Transaction
 from app.services.exchange_service import get_usd_rate
 
 import time
@@ -47,6 +46,7 @@ def create_app():
     app.register_blueprint(transactions_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
+    from models import User, Transaction
 
     @app.route("/")
     def home():

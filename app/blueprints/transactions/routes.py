@@ -17,6 +17,8 @@ from flask_login import login_required
 
 from app.forms import TransactionForm
 from app.extensions import db
+
+from app.extensions import db
 from models import Transaction
 
 import pandas as pd

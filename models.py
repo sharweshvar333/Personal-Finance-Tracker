@@ -6,11 +6,25 @@ class Transaction(db.Model):
     __tablename__ = "transactions"
 
     id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float)
-    category = db.Column(db.String)
-    transaction_type = db.Column(db.String)
+
+    amount = db.Column(db.Float, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    transaction_type = db.Column(db.String(20), nullable=False)
     date = db.Column(db.Date, nullable=False)
 
+    # -------- Recurring Transaction Fields --------
+    is_recurring = db.Column(db.Boolean, default=False)
+
+    recurrence = db.Column(
+        db.String(20)
+    )  # daily / weekly / monthly
+
+    start_date = db.Column(db.Date)
+
+    end_date = db.Column(db.Date)
+
+    last_processed = db.Column(db.Date)
+    
 
 class Budget(db.Model):
     __tablename__ = "budgets"
