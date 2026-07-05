@@ -5,7 +5,8 @@ from wtforms import (
     DateField,
     SubmitField,
     StringField,
-    PasswordField
+    PasswordField,
+    DecimalField
 )
 
 from wtforms.validators import (
@@ -94,3 +95,48 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
     
+class SavingsGoalForm(FlaskForm):
+
+    goal_name = StringField(
+        "Goal Name",
+        validators=[
+            DataRequired(),
+            Length(min=2, max=100)
+        ]
+    )
+
+    target_amount = DecimalField(
+        "Target Amount",
+        validators=[
+            DataRequired(),
+            NumberRange(min=1)
+        ]
+    )
+
+    current_amount = DecimalField(
+        "Current Amount",
+        default=0
+    )
+
+    target_date = DateField(
+        "Target Date",
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    submit = SubmitField("Create Goal")    
+
+class DepositForm(FlaskForm):
+
+    amount = FloatField(
+        "Deposit Amount",
+        validators=[
+            DataRequired(),
+            NumberRange(min=1)
+        ]
+    )
+
+    submit = SubmitField("Deposit")
+    
+

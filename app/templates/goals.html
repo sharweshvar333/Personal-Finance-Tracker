@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">🎯 Savings Goals</h2>
+
+    <div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Total Goals</h6>
+                <h3>{{ total_goals }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Completed</h6>
+                <h3>{{ completed_goals }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Total Saved</h6>
+                <h3>₹{{ "%.2f"|format(total_saved) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h6>Remaining</h6>
+                <h3>₹{{ "%.2f"|format(remaining) }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- Add Goal Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            Add New Savings Goal
+        </div>
+
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.goal_name.label(class="form-label") }}
+                    {{ form.goal_name(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.target_amount.label(class="form-label") }}
+                    {{ form.target_amount(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.current_amount.label(class="form-label") }}
+                    {{ form.current_amount(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.target_date.label(class="form-label") }}
+                    {{ form.target_date(class="form-control") }}
+                </div>
+
+                {{ form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+
+    <!-- Goals Table -->
+
+    {% if goals %}
+
+    <table class="table table-bordered table-striped align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Goal</th>
+                <th>Target Amount</th>
+                <th>Current Amount</th>
+                <th style="width:300px;">Progress</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th style="width:170px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for goal in goals %}
+
+            <tr>
+
+                <td>{{ goal.name }}</td>
+
+                <td>
+                    ₹{{ "%.2f"|format(goal.target_amount) }}
+                </td>
+
+                <td>
+                    ₹{{ "%.2f"|format(goal.current_amount) }}
+                </td>
+
+                <td>
+
+                    {% set percent = (goal.current_amount / goal.target_amount * 100) if goal.target_amount > 0 else 0 %}
+
+                    <div class="progress">
+                        <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: {{ percent }}%;"
+                            aria-valuenow="{{ percent }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+
+                            {{ "%.0f"|format(percent) }}%
+
+                        </div>
+                    </div>
+
+                </td>
+
+                <td>{{ goal.deadline }}</td>
+
+                <td>
+
+                    {% if goal.completed %}
+                        <span class="badge bg-success">
+                            ✅ Completed
+                        </span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">
+                            ⏳ In Progress
+                        </span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if goal.completed %}
+
+                        <button class="btn btn-secondary btn-sm mb-1" disabled>
+                            Completed
+                        </button>
+
+                    {% else %}
+
+                        <a
+                            href="{{ url_for('savings.deposit', goal_id=goal.id) }}"
+                            class="btn btn-primary btn-sm mb-1">
+                            Deposit
+                        </a>
+
+                    {% endif %}
+
+                    <form
+                        action="{{ url_for('savings.delete_goal', goal_id=goal.id) }}"
+                        method="POST"
+                        class="mt-1">
+
+                        {{ form.csrf_token }}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this savings goal?');">
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <div class="alert alert-info">
+            No savings goals yet.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

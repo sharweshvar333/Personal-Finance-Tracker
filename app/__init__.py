@@ -5,6 +5,8 @@ from app.blueprints.budget import budget_bp
 from app.blueprints.transactions import transactions_bp
 from app.blueprints.api import api_bp
 from app.blueprints.auth import auth_bp
+from app.blueprints.savings import savings_bp
+from app.blueprints.admin import admin_bp
 
 from app.scheduler import start_scheduler
 
@@ -24,6 +26,8 @@ def create_app():
 
     db.init_app(app)
     csrf.init_app(app)
+
+    from models import User, Transaction
 
     login_manager.init_app(app)
 
@@ -46,7 +50,8 @@ def create_app():
     app.register_blueprint(transactions_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
-    from models import User, Transaction
+    app.register_blueprint(savings_bp)
+    app.register_blueprint(admin_bp)
 
     @app.route("/")
     def home():

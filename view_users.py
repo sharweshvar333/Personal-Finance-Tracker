@@ -8,12 +8,12 @@ with app.app_context():
     users = User.query.all()
 
     print("\nUSERS")
-    print("=" * 30)
+    print("=" * 50)
 
     for user in users:
         print(
-            user.id,
-            user.username,
-            user.password_hash
+            f"ID: {user.id} | "
+            f"Username: {user.username} | "
+            f"Admin: {user.is_admin}"
         )
         

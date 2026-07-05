@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        👥 Manage Users
+    </h2>
+
+    {% if users %}
+
+    <table class="table table-bordered table-striped align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Admin</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.id }}</td>
+
+                <td>{{ user.username }}</td>
+
+                <td>
+                    {% if user.is_admin %}
+                        <span class="badge bg-success">
+                            Yes
+                        </span>
+                    {% else %}
+                        <span class="badge bg-secondary">
+                            No
+                        </span>
+                    {% endif %}
+                </td>
+
+                <td>
+
+                    {% if user.id == current_user.id %}
+
+                        <button class="btn btn-secondary btn-sm" disabled>
+                            Current User
+                        </button>
+
+                    {% else %}
+
+                        <form
+                            action="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                            method="POST"
+                            style="display:inline;">
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Delete this user?');">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <div class="alert alert-info">
+            No users found.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

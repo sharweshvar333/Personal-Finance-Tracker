@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        🛠️ Admin Dashboard
+    </h2>
+
+    <h2 class="mb-4">
+    🛠️ Admin Dashboard
+</h2>
+
+<div class="mb-4">
+
+    <a
+        href="{{ url_for('admin.manage_users') }}"
+        class="btn btn-primary me-2">
+
+        👥 Manage Users
+
+    </a>
+
+    <a
+        href="{{ url_for('transactions.transactions_home') }}"
+        class="btn btn-success me-2">
+
+        💰 Transactions
+
+    </a>
+
+    <a
+        href="{{ url_for('budget.budget_home') }}"
+        class="btn btn-warning">
+
+        📊 Budgets
+
+    </a>
+
+</div>
+
+
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow border-primary">
+                <div class="card-body text-center">
+                    <h5>Total Users</h5>
+                    <h2>{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow border-success">
+                <div class="card-body text-center">
+                    <h5>Transactions</h5>
+                    <h2>{{ total_transactions }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow border-warning">
+                <div class="card-body text-center">
+                    <h5>Budgets</h5>
+                    <h2>{{ total_budgets }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow border-danger">
+                <div class="card-body text-center">
+                    <h5>Savings Goals</h5>
+                    <h2>{{ total_goals }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="alert alert-info">
+        <h5>Administrator Controls</h5>
+
+        <p class="mb-1">
+            ✔ View application statistics
+        </p>
+
+        <p class="mb-1">
+            ✔ Monitor users
+        </p>
+
+        <p class="mb-1">
+            ✔ Monitor transactions
+        </p>
+
+        <p class="mb-0">
+            More admin tools will be added in upcoming tasks.
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}
