@@ -12,6 +12,8 @@ from app.scheduler import start_scheduler
 
 from app.services.exchange_service import get_usd_rate
 
+from flasgger import Swagger
+
 import time
 
 
@@ -33,6 +35,8 @@ def create_app():
     login_manager.init_app(app)
     limiter.init_app(app)
     babel.init_app(app)
+    
+    Swagger(app)
 
     app.config["BABEL_DEFAULT_LOCALE"] = "en"
     app.config["BABEL_DEFAULT_TIMEZONE"] = "Asia/Kolkata"
