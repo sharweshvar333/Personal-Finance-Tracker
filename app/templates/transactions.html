@@ -56,6 +56,28 @@
                         {{ form.date(class="form-control") }}
                     </div>
 
+                    <hr>
+
+                    <div class="form-check mb-3">
+                        {{ form.is_recurring(class="form-check-input") }}
+                        {{ form.is_recurring.label(class="form-check-label") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.recurrence.label(class="form-label") }}
+                        {{ form.recurrence(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.start_date.label(class="form-label") }}
+                        {{ form.start_date(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.end_date.label(class="form-label") }}
+                        {{ form.end_date(class="form-control") }}
+                    </div>
+
                     {{ form.submit(class="btn btn-success w-100") }}
 
                 </form>

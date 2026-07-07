@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("finance.db")
+conn = sqlite3.connect("instance/finance.db")
 cursor = conn.cursor()
 
 try:

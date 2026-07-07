@@ -6,13 +6,15 @@ from wtforms import (
     SubmitField,
     StringField,
     PasswordField,
-    DecimalField
+    DecimalField,
+    BooleanField
 )
 
 from wtforms.validators import (
     DataRequired,
     NumberRange,
-    Length
+    Length,
+    Optional
 )
 
 
@@ -50,6 +52,34 @@ class TransactionForm(FlaskForm):
     date = DateField(
         "Date",
         validators=[DataRequired()]
+    )
+
+    # ----------------------------
+    # NEW FIELDS
+    # ----------------------------
+
+    is_recurring = BooleanField(
+        "Recurring Transaction"
+    )
+
+    recurrence = SelectField(
+        "Repeat",
+        choices=[
+            ("daily", "Daily"),
+            ("weekly", "Weekly"),
+            ("monthly", "Monthly")
+        ],
+        validators=[Optional()]
+    )
+
+    start_date = DateField(
+        "Start Date",
+        validators=[Optional()]
+    )
+
+    end_date = DateField(
+        "End Date",
+        validators=[Optional()]
     )
 
     submit = SubmitField("Add Transaction")
@@ -94,7 +124,8 @@ class RegisterForm(FlaskForm):
     )
 
     submit = SubmitField("Register")
-    
+
+
 class SavingsGoalForm(FlaskForm):
 
     goal_name = StringField(
@@ -125,7 +156,8 @@ class SavingsGoalForm(FlaskForm):
         ]
     )
 
-    submit = SubmitField("Create Goal")    
+    submit = SubmitField("Create Goal")
+
 
 class DepositForm(FlaskForm):
 
@@ -139,4 +171,3 @@ class DepositForm(FlaskForm):
 
     submit = SubmitField("Deposit")
     
-

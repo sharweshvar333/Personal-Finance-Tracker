@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from app.extensions import db, csrf, login_manager, limiter
+from app.extensions import db, csrf, login_manager, limiter, babel
 from app.blueprints.budget import budget_bp
 from app.blueprints.transactions import transactions_bp
 from app.blueprints.api import api_bp
@@ -27,11 +27,15 @@ def create_app():
     db.init_app(app)
     csrf.init_app(app)
 
+
     from models import User, Transaction
 
     login_manager.init_app(app)
-
     limiter.init_app(app)
+    babel.init_app(app)
+
+    app.config["BABEL_DEFAULT_LOCALE"] = "en"
+    app.config["BABEL_DEFAULT_TIMEZONE"] = "Asia/Kolkata"
 
     @login_manager.user_loader
     def load_user(user_id):

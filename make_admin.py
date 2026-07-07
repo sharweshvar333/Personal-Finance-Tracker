@@ -1,6 +1,7 @@
 import sqlite3
 
-conn = sqlite3.connect("finance.db")
+# Connect to the SAME database used by Flask
+conn = sqlite3.connect("instance/finance.db")
 cursor = conn.cursor()
 
 username = input("Enter username to make admin: ")

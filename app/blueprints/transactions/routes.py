@@ -47,7 +47,13 @@ def transactions_home():
             amount=form.amount.data,
             category=form.category.data,
             transaction_type=form.transaction_type.data,
-            date=form.date.data
+            date=form.date.data,
+
+            is_recurring=form.is_recurring.data,
+            recurrence=form.recurrence.data if form.is_recurring.data else None,
+            start_date=form.start_date.data if form.is_recurring.data else None,
+            end_date=form.end_date.data if form.is_recurring.data else None,
+            last_processed=form.start_date.data if form.is_recurring.data else None
         )
 
         db.session.add(transaction)

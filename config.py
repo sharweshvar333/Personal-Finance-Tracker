@@ -12,14 +12,14 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///{os.path.join(BASE_DIR, 'finance.db')}"
+        f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'finance.db')}"
     )
 
 
 class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///{os.path.join(BASE_DIR, 'finance.db')}"
+        f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'finance.db')}"
     )
 
 
