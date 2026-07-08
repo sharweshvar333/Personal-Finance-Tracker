@@ -50,7 +50,8 @@
                         <input
                             type="month"
                             name="month"
-                            class="form-control">
+                            class="form-control"
+                            required>
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -62,7 +63,8 @@
                             type="number"
                             step="0.01"
                             name="limit_amount"
-                            class="form-control">
+                            class="form-control"
+                            required>
                     </div>
 
                 </div>
@@ -80,7 +82,6 @@
     </div>
 
     <!-- Existing Budgets -->
-
     <div class="card shadow">
 
         <div class="card-header bg-dark text-white">
@@ -160,9 +161,7 @@
                                     {% else %}
                                         bg-success
                                     {% endif %}"
-
                                     role="progressbar"
-
                                     style="width: {{ budget.percent }}%;">
 
                                     {{ "%.0f"|format(budget.percent) }}%
@@ -195,6 +194,64 @@
 
     </div>
 
+    <!-- Budget Analytics -->
+    <div class="card shadow mt-4">
+
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+                📊 Budget vs Actual Spending
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <canvas id="budgetChart" height="120"></canvas>
+
+        </div>
+
+    </div>
+
 </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+
+const labels = {{ budget_labels | tojson }};
+const limits = {{ budget_limits | tojson }};
+const spent = {{ budget_spent | tojson }};
+
+const ctx = document.getElementById("budgetChart");
+
+new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: "Budget",
+                data: limits
+            },
+            {
+                label: "Spent",
+                data: spent
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
 
 {% endblock %}

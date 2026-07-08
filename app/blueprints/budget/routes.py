@@ -5,6 +5,7 @@ from . import budget_bp
 from app.extensions import db
 from models import Budget, Transaction
 
+
 @budget_bp.route("/budget", methods=["GET", "POST"])
 def budget_home():
 
@@ -29,14 +30,20 @@ def budget_home():
 
     budgets = Budget.query.order_by(Budget.month.desc()).all()
 
+    # Data for Chart.js
+    budget_labels = []
+    budget_limits = []
+    budget_spent = []
+
     for budget in budgets:
+
         spent = db.session.query(
             db.func.sum(Transaction.amount)
         ).filter(
-                Transaction.category == budget.category,
-                Transaction.transaction_type == "expense"
+            Transaction.category == budget.category,
+            Transaction.transaction_type == "expense"
         ).scalar()
-        
+
         budget.spent = spent or 0
 
         budget.remaining = budget.limit_amount - budget.spent
@@ -55,7 +62,16 @@ def budget_home():
             else "Within Budget"
         )
 
+        # Chart data
+        budget_labels.append(budget.category)
+        budget_limits.append(budget.limit_amount)
+        budget_spent.append(budget.spent)
+
     return render_template(
         "budget.html",
-        budgets=budgets
+        budgets=budgets,
+        budget_labels=budget_labels,
+        budget_limits=budget_limits,
+        budget_spent=budget_spent
     )
+    

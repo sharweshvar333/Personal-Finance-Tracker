@@ -22,11 +22,11 @@
 
     <div class="container">
 
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand fw-bold" href="/">
             💰 Finance Tracker
         </a>
 
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center flex-wrap gap-2">
 
             {% if current_user.is_authenticated %}
 
@@ -34,26 +34,37 @@
                     Welcome, {{ current_user.username }}
                 </span>
 
-                <a class="btn btn-outline-light me-2"
-                    href="{{ url_for('transactions.dashboard') }}">
-                    Dashboard
+                <a class="btn btn-outline-light"
+                   href="{{ url_for('transactions.dashboard') }}">
+                    📊 Dashboard
                 </a>
 
-
-                <a class="btn btn-outline-light me-2"
-                   href="/budget">
-                    Budget
+                <a class="btn btn-outline-light"
+                   href="{{ url_for('transactions.transactions_home') }}">
+                    💳 Transactions
                 </a>
 
-                <a class="btn btn-outline-light me-2"
-                   href="/transactions">
-                    Transactions
+                <a class="btn btn-outline-light"
+                   href="{{ url_for('budget.budget_home') }}">
+                    💰 Budget
                 </a>
 
-                <a class="btn btn-outline-light me-2"
+                <a class="btn btn-outline-light"
+                   href="{{ url_for('savings.goals') }}">
+                    🎯 Goals
+                </a>
+
+                <a class="btn btn-outline-light"
                    href="{{ url_for('transactions.import_transactions') }}">
-                    Import CSV
+                    📂 Import CSV
                 </a>
+
+                {% if current_user.is_admin %}
+                <a class="btn btn-warning"
+                   href="{{ url_for('admin.admin_dashboard') }}">
+                    👑 Admin
+                </a>
+                {% endif %}
 
                 <a class="btn btn-danger"
                    href="{{ url_for('auth.logout') }}">
@@ -62,7 +73,7 @@
 
             {% else %}
 
-                <a class="btn btn-outline-light me-2"
+                <a class="btn btn-outline-light"
                    href="{{ url_for('auth.login') }}">
                     Login
                 </a>

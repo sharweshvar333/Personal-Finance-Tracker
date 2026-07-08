@@ -19,7 +19,7 @@ from app.forms import TransactionForm
 from app.extensions import db
 
 from app.extensions import db
-from models import Transaction
+from models import Transaction, Budget
 
 import pandas as pd
 from datetime import date
@@ -117,6 +117,31 @@ def transactions_home():
     elapsed = time.perf_counter() - start
     log_slow_query("Load Transactions Page", elapsed)
 
+    budget_alerts = []
+
+    budgets = Budget.query.all()
+
+    for budget in budgets:
+        spent = db.session.query(
+            db.func.sum(Transaction.amount)
+        ).filter(
+            Transaction.category == budget.category,
+            Transaction.transaction_type == "expense"
+        ).scalar() or 0
+
+        if budget.limit_amount > 0:
+
+            percent = (spent / budget.limit_amount) * 100
+
+            if percent >= 80:
+
+                budget_alerts.append({
+                    "category": budget.category,
+                    "spent": spent,
+                    "limit": budget.limit_amount,
+                    "percent": round(percent, 1)
+                })
+
     return render_template(
         "transactions.html",
         form=form,
@@ -135,39 +160,133 @@ def dashboard():
     start = time.perf_counter()
 
     transactions = Transaction.query.all()
+    from models import Budget
 
-    elapsed = time.perf_counter() - start 
+    elapsed = time.perf_counter() - start
     log_slow_query("Dashboard Query", elapsed)
 
+    # -------------------------------
+    # Summary Statistics
+    # -------------------------------
+    total_income = sum(
+        t.amount
+        for t in transactions
+        if t.transaction_type.lower() == "income"
+    )
+
+    total_expense = sum(
+        t.amount
+        for t in transactions
+        if t.transaction_type.lower() == "expense"
+    )
+
+    balance = total_income - total_expense
+
+    total_transactions = len(transactions)
+
+    # -------------------------------
+    # Spending by Category
+    # -------------------------------
     category_totals = {}
 
     for transaction in transactions:
+
         if transaction.transaction_type.lower() == "expense":
+
             category = transaction.category
+
             category_totals[category] = (
                 category_totals.get(category, 0)
                 + transaction.amount
             )
 
+    # -------------------------------
+    # Monthly Expenses
+    # -------------------------------
     monthly_totals = {}
 
     for transaction in transactions:
+
         if transaction.transaction_type.lower() == "expense":
+
             month = transaction.date.strftime("%b %Y")
+
             monthly_totals[month] = (
                 monthly_totals.get(month, 0)
                 + transaction.amount
             )
 
-    print(category_totals)
-    print(monthly_totals)
+    recent_transactions = (
+        Transaction.query
+        .order_by(Transaction.date.desc())
+        .limit(5)
+        .all()
+    )        
+
+    # Budget alerts
+    budget_alerts = []
+
+    budgets = Budget.query.all()
+
+    for budget in budgets:
+        spent = db.session.query(
+            db.func.sum(Transaction.amount)
+        ).filter(
+            Transaction.category == budget.category,
+            Transaction.transaction_type == "expense"
+        ).scalar() or 0
+
+        if budget.limit_amount > 0:
+            percent = (spent / budget.limit_amount) * 100
+
+            if percent >= 80:
+                budget_alerts.append({
+                    "category": budget.category,
+                    "spent": spent,
+                    "limit": budget.limit_amount,
+                    "percent": percent
+                })
+
+    # Financial Insights
+
+    highest_category = None
+    highest_amount = 0
+
+    if category_totals:
+        highest_category = max(
+            category_totals,
+            key=category_totals.get
+        )
+        highest_amount = category_totals[highest_category]
+
+    average_expense = 0
+
+    expense_count = len([
+        t for t in transactions
+        if t.transaction_type.lower() == "expense"
+    ])
+
+    if expense_count:
+        average_expense = total_expense / expense_count
 
     return render_template(
         "dashboard.html",
+
+        total_income=total_income,
+        total_expense=total_expense,
+        balance=balance,
+        total_transactions=total_transactions,
+
         category_labels=list(category_totals.keys()),
         category_values=list(category_totals.values()),
+
         month_labels=list(monthly_totals.keys()),
-        month_values=list(monthly_totals.values())
+        month_values=list(monthly_totals.values()),
+        budget_alerts=budget_alerts,
+        recent_transactions=recent_transactions,
+        highest_category=highest_category,
+        highest_amount=highest_amount,
+        average_expense=average_expense,
     )
 
 
