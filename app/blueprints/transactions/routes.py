@@ -32,6 +32,9 @@ from reportlab.lib import colors
 
 from flask import send_file
 
+import time
+from app.performance import log_slow_query
+
 
 @transactions_bp.route("/transactions", methods=["GET", "POST"])
 @login_required
@@ -102,12 +105,17 @@ def transactions_home():
 
     page = request.args.get("page", 1, type=int)
 
+    start = time.perf_counter()
+
     transactions = query.order_by(
         Transaction.date.desc()
     ).paginate(
         page=page,
         per_page=5
     )
+
+    elapsed = time.perf_counter() - start
+    log_slow_query("Load Transactions Page", elapsed)
 
     return render_template(
         "transactions.html",
@@ -124,7 +132,12 @@ def dashboard():
 
     print("===== Dashboard route called =====")
 
+    start = time.perf_counter()
+
     transactions = Transaction.query.all()
+
+    elapsed = time.perf_counter() - start 
+    log_slow_query("Dashboard Query", elapsed)
 
     category_totals = {}
 
@@ -218,7 +231,10 @@ def import_transactions():
 @login_required
 def export_transactions():
 
+    start = time.perf_counter()
     transactions = Transaction.query.all()
+    elapsed = time.perf_counter() - start
+    log_slow_query("Export CSV Query", elapsed)
 
     output = StringIO()
 
@@ -255,8 +271,11 @@ def export_transactions():
 @login_required
 def export_pdf():
 
+    start = time.perf_counter()
     transactions = Transaction.query.all()
-
+    elapsed = time.perf_counter() - start
+    log_slow_query("Export PDF Query", elapsed)
+    
     buffer = BytesIO()
 
     doc = SimpleDocTemplate(buffer)

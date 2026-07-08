@@ -8,9 +8,18 @@ class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     amount = db.Column(db.Float, nullable=False)
-    category = db.Column(db.String(100), nullable=False)
-    transaction_type = db.Column(db.String(20), nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    category = db.Column(
+        db.String(100),
+        index=True
+    )
+    transaction_type = db.Column(
+        db.String(20),
+        index=True
+    )
+    date = db.Column(
+        db.Date,
+        index=True
+    )
 
     # -------- Recurring Transaction Fields --------
     is_recurring = db.Column(db.Boolean, default=False)
@@ -65,7 +74,8 @@ class User(UserMixin, db.Model):
     username = db.Column(
         db.String(100),
         unique=True,
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     password_hash = db.Column(
