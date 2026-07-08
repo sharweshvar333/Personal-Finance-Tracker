@@ -106,3 +106,17 @@ pytest
 Sharweshvar P
 
 Internship Project – Personal Finance Tracker
+
+## Running with Docker
+
+Build
+
+docker build -t finance-tracker .
+
+Run
+
+docker run -p 5000:5000 finance-tracker
+
+Open
+
+http://localhost:5000
