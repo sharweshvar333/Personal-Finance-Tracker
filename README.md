@@ -4,7 +4,7 @@ A Flask-based Personal Finance Tracker developed as part of my internship projec
 
 ---
 
-## Features
+## ✨ Features
 
 - User Registration & Login
 - Income & Expense Tracking
@@ -21,9 +21,9 @@ A Flask-based Personal Finance Tracker developed as part of my internship projec
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- Python
+- Python 3.12
 - Flask
 - SQLAlchemy
 - SQLite
@@ -36,9 +36,9 @@ A Flask-based Personal Finance Tracker developed as part of my internship projec
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
-```
+```text
 app/
 │
 ├── blueprints/
@@ -59,21 +59,22 @@ docker-compose.yml
 
 ---
 
-## Installation
+## 🚀 Installation
 
-Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/sharweshvar333/Personal-Finance-Tracker.git
+cd Personal-Finance-Tracker
 ```
 
-Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application
+### Run the application
 
 ```bash
 python run.py
@@ -81,19 +82,31 @@ python run.py
 
 ---
 
-## Docker
+## 🐳 Running with Docker
 
-Build and start
+### Build the Docker image
 
 ```bash
-docker compose up --build
+docker build -t finance-tracker .
+```
+
+### Run the container
+
+```bash
+docker run -p 5000:5000 finance-tracker
+```
+
+### Open the application
+
+```
+http://localhost:5000
 ```
 
 ---
 
-## Testing
+## ✅ Testing
 
-Run tests
+Run all tests
 
 ```bash
 pytest
@@ -101,22 +114,8 @@ pytest
 
 ---
 
-## Author
+## 👨‍💻 Author
 
-Sharweshvar P
+**Sharweshvar P**
 
 Internship Project – Personal Finance Tracker
-
-## Running with Docker
-
-Build
-
-docker build -t finance-tracker .
-
-Run
-
-docker run -p 5000:5000 finance-tracker
-
-Open
-
-http://localhost:5000

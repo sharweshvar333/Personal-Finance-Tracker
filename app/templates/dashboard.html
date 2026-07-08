@@ -2,9 +2,31 @@
 
 {% block content %}
 
-<h2 class="mb-4">
-    📊 Dashboard
-</h2>
+<div class="row align-items-center mb-5">
+
+    <div class="col-md-8">
+
+        <h1 class="fw-bold mb-2">
+            📊 Finance Dashboard
+        </h1>
+
+        <p class="text-muted fs-5">
+            Welcome back!
+            Here's an overview of your finances.
+        </p>
+
+    </div>
+
+    <div class="col-md-4 text-md-end">
+
+        <div class="badge bg-primary p-3 fs-6 shadow">
+            {{ current_user.username }}
+        </div>
+
+    </div>
+
+</div>
+
 
 <!-- Budget Alerts -->
 {% if budget_alerts %}
@@ -73,149 +95,356 @@
 
 <!-- Summary Cards -->
 
-<div class="row mb-4">
+<!-- Summary Cards -->
 
-    <div class="col-md-3">
-        <div class="card text-white bg-success shadow">
-            <div class="card-body text-center">
-                <h6>Total Income</h6>
-                <h3>₹{{ "%.2f"|format(total_income) }}</h3>
+<div class="row g-4 mb-5">
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-lg text-white"
+             style="background:linear-gradient(135deg,#00b09b,#96c93d); border-radius:20px;">
+
+            <div class="card-body">
+
+                <small class="opacity-75">
+                    Total Income
+                </small>
+
+                <h2 class="fw-bold mt-3">
+                    ₹{{ "%.2f"|format(total_income) }}
+                </h2>
+
+                <i class="bi bi-arrow-down-circle-fill fs-1 opacity-75"></i>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-white bg-danger shadow">
-            <div class="card-body text-center">
-                <h6>Total Expense</h6>
-                <h3>₹{{ "%.2f"|format(total_expense) }}</h3>
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-lg text-white"
+             style="background:linear-gradient(135deg,#ff416c,#ff4b2b); border-radius:20px;">
+
+            <div class="card-body">
+
+                <small class="opacity-75">
+                    Total Expense
+                </small>
+
+                <h2 class="fw-bold mt-3">
+                    ₹{{ "%.2f"|format(total_expense) }}
+                </h2>
+
+                <i class="bi bi-cash-stack fs-1 opacity-75"></i>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-white bg-primary shadow">
-            <div class="card-body text-center">
-                <h6>Current Balance</h6>
-                <h3>₹{{ "%.2f"|format(balance) }}</h3>
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-lg text-white"
+             style="background:linear-gradient(135deg,#4facfe,#00f2fe); border-radius:20px;">
+
+            <div class="card-body">
+
+                <small class="opacity-75">
+                    Current Balance
+                </small>
+
+                <h2 class="fw-bold mt-3">
+                    ₹{{ "%.2f"|format(balance) }}
+                </h2>
+
+                <i class="bi bi-wallet2 fs-1 opacity-75"></i>
+
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-white bg-dark shadow">
-            <div class="card-body text-center">
-                <h6>Total Transactions</h6>
-                <h3>{{ total_transactions }}</h3>
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-lg text-white"
+             style="background:linear-gradient(135deg,#434343,#000000); border-radius:20px;">
+
+            <div class="card-body">
+
+                <small class="opacity-75">
+                    Transactions
+                </small>
+
+                <h2 class="fw-bold mt-3">
+                    {{ total_transactions }}
+                </h2>
+
+                <i class="bi bi-receipt-cutoff fs-1 opacity-75"></i>
+
             </div>
+
         </div>
+
     </div>
 
 </div>
 
 <!-- Quick Actions -->
 
-<div class="card shadow mb-4">
+<!-- Quick Actions -->
 
-    <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">
-            ⚡ Quick Actions
-        </h5>
-    </div>
+<div class="row g-4 mb-5">
 
-    <div class="card-body text-center">
+    <div class="col-md-3">
 
         <a href="{{ url_for('transactions.transactions_home') }}"
-            class="btn btn-success m-2">
-            ➕ Add Transaction
-        </a>
+           class="text-decoration-none">
 
-        <a href="{{ url_for('budget.budget_home') }}"
-           class="btn btn-primary m-2">
-            💰 Manage Budget
-        </a>
+            <div class="card border-0 shadow-lg h-100 text-center p-4">
 
-        <a href="{{ url_for('savings.goals') }}"
-           class="btn btn-warning m-2">
-            🎯 Savings Goals
-        </a>
+                <div class="display-5 text-success mb-3">
+                    <i class="bi bi-plus-circle-fill"></i>
+                </div>
 
-        <a href="{{ url_for('transactions.import_transactions') }}"
-           class="btn btn-secondary m-2">
-            📂 Import CSV
+                <h5>Add Transaction</h5>
+
+                <small class="text-muted">
+                    Record a new income or expense
+                </small>
+
+            </div>
+
         </a>
 
     </div>
 
-</div>
+    <div class="col-md-3">
+
+        <a href="{{ url_for('budget.budget_home') }}"
+           class="text-decoration-none">
+
+            <div class="card border-0 shadow-lg h-100 text-center p-4">
+
+                <div class="display-5 text-primary mb-3">
+                    <i class="bi bi-piggy-bank-fill"></i>
+                </div>
+
+                <h5>Budgets</h5>
+
+                <small class="text-muted">
+                    Manage monthly budgets
+                </small>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <a href="{{ url_for('savings.goals') }}"
+           class="text-decoration-none">
+
+            <div class="card border-0 shadow-lg h-100 text-center p-4">
+
+                <div class="display-5 text-warning mb-3">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+
+                <h5>Savings Goals</h5>
+
+                <small class="text-muted">
+                    Track future savings
+                </small>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <a href="{{ url_for('transactions.import_transactions') }}"
+           class="text-decoration-none">
+
+            <div class="card border-0 shadow-lg h-100 text-center p-4">
+
+                <div class="display-5 text-secondary mb-3">
+                    <i class="bi bi-upload"></i>
+                </div>
+
+                <h5>Import CSV</h5>
+
+                <small class="text-muted">
+                    Import transactions quickly
+                </small>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>        
 
 <!-- Financial Insights -->
 
-<div class="row mb-4">
+<div class="row g-4 mb-5">
 
-    <div class="col-md-6">
-        <div class="card shadow border-primary">
-            <div class="card-body">
+    <!-- Highest Spending Category -->
 
-                <h5 class="card-title">
-                    📈 Highest Spending Category
-                </h5>
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-lg h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-uppercase text-muted">
+                            Expense Analysis
+                        </small>
+
+                        <h5 class="fw-bold mb-0">
+                            Highest Spending Category
+                        </h5>
+
+                    </div>
+
+                    <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+
+                        <i class="bi bi-graph-up-arrow text-danger fs-2"></i>
+
+                    </div>
+
+                </div>
+
+                <hr>
 
                 {% if highest_category %}
 
-                    <h4 class="text-primary">
+                    <h2 class="fw-bold text-dark mb-2">
                         {{ highest_category }}
-                    </h4>
+                    </h2>
 
-                    <p class="mb-0">
+                    <h3 class="fw-bold text-danger">
                         ₹{{ "%.2f"|format(highest_amount) }}
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Your highest expense category
                     </p>
 
                 {% else %}
 
-                    <p>No expense data available.</p>
+                    <div class="text-center py-4">
+
+                        <i class="bi bi-wallet2 display-5 text-secondary"></i>
+
+                        <p class="text-muted mt-3">
+                            No expense data available.
+                        </p>
+
+                    </div>
 
                 {% endif %}
 
             </div>
+
         </div>
+
     </div>
 
-    <div class="col-md-6">
-        <div class="card shadow border-success">
-            <div class="card-body">
 
-                <h5 class="card-title">
-                    💳 Average Expense
-                </h5>
 
-                <h4 class="text-success">
+    <!-- Average Expense -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-lg h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-uppercase text-muted">
+                            Spending Statistics
+                        </small>
+
+                        <h5 class="fw-bold mb-0">
+                            Average Expense
+                        </h5>
+
+                    </div>
+
+                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
+
+                        <i class="bi bi-cash-stack text-success fs-2"></i>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <h2 class="fw-bold text-success mb-2">
                     ₹{{ "%.2f"|format(average_expense) }}
-                </h4>
+                </h2>
 
-                <p class="mb-0">
-                    Per expense transaction
+                <p class="text-muted">
+                    Average expense per transaction
                 </p>
 
+                <div class="progress" style="height:8px; border-radius:10px;">
+
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width:70%; border-radius:10px;">
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
 </div>
 
 <!-- Charts -->
 
-<div class="row">
+<div class="row g-4 mb-5">
+
+    <!-- Spending by Category -->
 
     <div class="col-lg-6">
 
-        <div class="card shadow mb-4">
+        <div class="card border-0 shadow-lg h-100">
 
-            <div class="card-header bg-primary text-white">
-                Spending by Category
+            <div class="card-header bg-white border-0 pt-4">
+
+                <h5 class="fw-bold mb-0">
+                    📊 Spending by Category
+                </h5>
+
+                <small class="text-muted">
+                    Expense Distribution
+                </small>
+
             </div>
 
-            <div class="card-body">
+            <div class="card-body" style="height:350px;">
                 <canvas id="categoryChart"></canvas>
             </div>
 
@@ -223,15 +452,27 @@
 
     </div>
 
+
+
+    <!-- Monthly Trend -->
+
     <div class="col-lg-6">
 
-        <div class="card shadow mb-4">
+        <div class="card border-0 shadow-lg h-100">
 
-            <div class="card-header bg-success text-white">
-                Monthly Expense Trend
+            <div class="card-header bg-white border-0 pt-4">
+
+                <h5 class="fw-bold mb-0">
+                    📈 Monthly Expense Trend
+                </h5>
+
+                <small class="text-muted">
+                    Monthly Spending Overview
+                </small>
+
             </div>
 
-            <div class="card-body">
+            <div class="card-body" style="height:350px;">
                 <canvas id="monthlyChart"></canvas>
             </div>
 
@@ -241,28 +482,48 @@
 
 </div>
 
-
 <!-- Recent Transactions -->
 
-<div class="card shadow mt-4">
+<div class="card border-0 shadow-lg mt-5">
 
-    <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">
-            🕒 Recent Transactions
-        </h5>
+    <div class="card-header bg-white border-0 p-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h4 class="fw-bold mb-0">
+
+                <i class="bi bi-clock-history text-primary"></i>
+
+                Recent Transactions
+
+            </h4>
+
+            <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                {{ total_transactions }} Records
+
+            </span>
+
+        </div>
+
     </div>
 
-    <div class="card-body">
+    <div class="table-responsive">
 
-        <table class="table table-striped table-hover">
+        <table class="table table-hover align-middle mb-0">
 
-            <thead>
+            <thead class="table-light">
 
                 <tr>
+
                     <th>Date</th>
+
                     <th>Category</th>
+
                     <th>Type</th>
+
                     <th class="text-end">Amount</th>
+
                 </tr>
 
             </thead>
@@ -273,30 +534,68 @@
 
                 <tr>
 
-                    <td>{{ transaction.date.strftime("%d %b %Y") }}</td>
+                    <td>
 
-                    <td>{{ transaction.category }}</td>
+                        <strong>
+
+                            {{ transaction.date.strftime("%d %b %Y") }}
+
+                        </strong>
+
+                    </td>
 
                     <td>
 
-                        {% if transaction.transaction_type.lower() == "income" %}
+                        {{ transaction.category }}
 
-                            <span class="badge bg-success">
+                    </td>
+
+                    <td>
+
+                        {% if transaction.transaction_type.lower()=="income" %}
+
+                            <span class="badge rounded-pill bg-success">
+
+                                <i class="bi bi-arrow-down-circle-fill"></i>
+
                                 Income
+
                             </span>
 
                         {% else %}
 
-                            <span class="badge bg-danger">
+                            <span class="badge rounded-pill bg-danger">
+
+                                <i class="bi bi-arrow-up-circle-fill"></i>
+
                                 Expense
+
                             </span>
 
                         {% endif %}
 
                     </td>
 
-                    <td class="text-end">
-                        ₹{{ "%.2f"|format(transaction.amount) }}
+                    <td class="text-end fw-bold">
+
+                        {% if transaction.transaction_type.lower()=="income" %}
+
+                            <span class="text-success">
+
+                                + ₹{{ "%.2f"|format(transaction.amount) }}
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="text-danger">
+
+                                - ₹{{ "%.2f"|format(transaction.amount) }}
+
+                            </span>
+
+                        {% endif %}
+
                     </td>
 
                 </tr>
@@ -305,8 +604,14 @@
 
                 <tr>
 
-                    <td colspan="4" class="text-center text-muted">
-                        No transactions available.
+                    <td colspan="4" class="text-center py-5 text-muted">
+
+                        <i class="bi bi-wallet2 display-5"></i>
+
+                        <br><br>
+
+                        No transactions found.
+
                     </td>
 
                 </tr>
@@ -323,7 +628,6 @@
 
 {% endblock %}
 
-
 {% block scripts %}
 
 <script>
@@ -336,48 +640,181 @@ window.onload = function () {
     const monthLabels = {{ month_labels | tojson }};
     const monthValues = {{ month_values | tojson }};
 
+    // Category Doughnut Chart
+
     new Chart(document.getElementById("categoryChart"), {
 
         type: "doughnut",
 
         data: {
+
             labels: categoryLabels,
+
             datasets: [{
-                label: "Expenses",
-                data: categoryValues
+
+                data: categoryValues,
+
+                backgroundColor: [
+
+                    "#4e73df",
+                    "#1cc88a",
+                    "#36b9cc",
+                    "#f6c23e",
+                    "#e74a3b",
+                    "#6f42c1",
+                    "#20c997",
+                    "#fd7e14"
+
+                ],
+
+                borderColor: "#ffffff",
+
+                borderWidth: 3,
+
+                hoverOffset: 15
+
             }]
+
         },
 
         options: {
+
             responsive: true,
+
+            maintainAspectRatio: false,
+
+            cutout: "68%",
+
             plugins: {
+
                 legend: {
-                    position: "bottom"
+
+                    position: "bottom",
+
+                    labels: {
+
+                        padding: 18,
+
+                        usePointStyle: true,
+
+                        pointStyle: "circle",
+
+                        font: {
+
+                            size: 13
+
+                        }
+
+                    }
+
                 }
+
             }
+
         }
 
     });
 
+
+
+    // Monthly Expense Trend
+
     new Chart(document.getElementById("monthlyChart"), {
 
-        type: "bar",
+        type: "line",
 
         data: {
+
             labels: monthLabels,
+
             datasets: [{
+
                 label: "Monthly Expenses",
-                data: monthValues
+
+                data: monthValues,
+
+                borderColor: "#4e73df",
+
+                backgroundColor: "rgba(78,115,223,0.15)",
+
+                fill: true,
+
+                tension: 0.45,
+
+                pointRadius: 5,
+
+                pointHoverRadius: 8,
+
+                pointBackgroundColor: "#4e73df",
+
+                borderWidth: 4
+
             }]
+
         },
 
         options: {
+
             responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
                 }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    grid: {
+
+                        display: false
+
+                    },
+
+                    ticks: {
+
+                        font: {
+
+                            size: 12
+
+                        }
+
+                    }
+
+                },
+
+                y: {
+
+                    beginAtZero: true,
+
+                    grid: {
+
+                        color: "#ececec"
+
+                    },
+
+                    ticks: {
+
+                        font: {
+
+                            size: 12
+
+                        }
+
+                    }
+
+                }
+
             }
+
         }
 
     });
