@@ -651,28 +651,19 @@ window.onload = function () {
             labels: categoryLabels,
 
             datasets: [{
-
+                label: "Expenses",
                 data: categoryValues,
-
                 backgroundColor: [
-
-                    "#4e73df",
-                    "#1cc88a",
-                    "#36b9cc",
-                    "#f6c23e",
-                    "#e74a3b",
-                    "#6f42c1",
-                    "#20c997",
-                    "#fd7e14"
-
+                    "#4F46E5",
+                    "#3B82F6",
+                    "#06B6D4",
+                    "#10B981",
+                    "#F59E0B",
+                    "#EF4444",
+                    "#8B5CF6"
                 ],
-
-                borderColor: "#ffffff",
-
-                borderWidth: 3,
-
-                hoverOffset: 15
-
+                borderWidth: 0,
+                hoverOffset: 12
             }]
 
         },
@@ -729,26 +720,11 @@ window.onload = function () {
 
             datasets: [{
 
-                label: "Monthly Expenses",
-
-                data: monthValues,
-
-                borderColor: "#4e73df",
-
-                backgroundColor: "rgba(78,115,223,0.15)",
-
-                fill: true,
-
-                tension: 0.45,
-
-                pointRadius: 5,
-
-                pointHoverRadius: 8,
-
-                pointBackgroundColor: "#4e73df",
-
-                borderWidth: 4
-
+                label:"Monthly Expense",
+                data:monthValues,
+                backgroundColor:"#4F46E5",
+                borderRadius:12,
+                maxBarThickness:40
             }]
 
         },

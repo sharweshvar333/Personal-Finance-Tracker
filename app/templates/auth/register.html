@@ -2,58 +2,80 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center">
 
-    <div class="col-md-5">
+    <div class="col-lg-5 col-md-7">
 
-        <div class="card shadow">
+        <div class="card border-0 shadow-lg rounded-4">
 
-            <div class="card-header bg-success text-white">
+            <div class="card-body p-5">
 
-                <h3 class="mb-0 text-center">
-                    Create Account
-                </h3>
+                <div class="text-center mb-4">
 
-            </div>
+                    <div class="display-4 mb-2">💰</div>
 
-            <div class="card-body">
+                    <h2 class="fw-bold">Create Account</h2>
+
+                    <p class="text-muted">
+                        Start managing your finances smarter.
+                    </p>
+
+                </div>
 
                 <form method="POST">
 
                     {{ form.hidden_tag() }}
 
-                    <div class="mb-3">
+                    <div class="mb-4">
 
-                        {{ form.username.label(class="form-label") }}
+                        {{ form.username.label(class="form-label fw-semibold") }}
 
-                        {{ form.username(class="form-control") }}
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+
+                            {{ form.username(class="form-control form-control-lg", placeholder="Choose Username") }}
+
+                        </div>
 
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
 
-                        {{ form.password.label(class="form-label") }}
+                        {{ form.password.label(class="form-label fw-semibold") }}
 
-                        {{ form.password(class="form-control") }}
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+
+                            {{ form.password(class="form-control form-control-lg", placeholder="Create Password") }}
+
+                        </div>
 
                     </div>
 
                     <div class="d-grid">
 
-                        {{ form.submit(class="btn btn-success") }}
+                        {{ form.submit(class="btn btn-success btn-lg rounded-pill") }}
 
                     </div>
 
                 </form>
 
-                <hr>
+                <hr class="my-4">
 
-                <p class="text-center">
+                <p class="text-center mb-0">
 
                     Already have an account?
 
-                    <a href="{{ url_for('auth.login') }}">
-                        Login here
+                    <a href="{{ url_for('auth.login') }}" class="fw-semibold text-decoration-none">
+
+                        Login
+
                     </a>
 
                 </p>
@@ -67,4 +89,3 @@
 </div>
 
 {% endblock %}
-

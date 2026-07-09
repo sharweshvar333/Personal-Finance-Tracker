@@ -2,83 +2,260 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<!-- HERO HEADER -->
 
-    <div class="col-md-6">
+<div class="row mb-4">
 
-        <!-- Export Buttons -->
-        <div class="mb-3 text-end">
+    <div class="col-lg-8">
 
-            <a href="{{ url_for('transactions.export_transactions') }}"
-               class="btn btn-success">
-                📥 Export CSV
-            </a>
+        <h1 class="fw-bold display-6">
+            💳 Transactions
+        </h1>
 
-            <a href="{{ url_for('transactions.export_pdf') }}"
-               class="btn btn-danger ms-2">
-                📄 Generate PDF
-            </a>
+        <p class="text-muted fs-5">
+            Record, manage and analyze your daily income & expenses.
+        </p>
+
+    </div>
+
+    <div class="col-lg-4 text-lg-end">
+
+        <a href="{{ url_for('transactions.export_transactions') }}"
+           class="btn btn-success rounded-pill px-4 shadow me-2">
+
+            <i class="bi bi-download"></i>
+            Export CSV
+
+        </a>
+
+        <a href="{{ url_for('transactions.export_pdf') }}"
+           class="btn btn-danger rounded-pill px-4 shadow">
+
+            <i class="bi bi-file-earmark-pdf"></i>
+            PDF
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card border-0 shadow-lg mb-5">
+
+    <div class="card-header bg-primary text-white py-3">
+
+        <h4 class="mb-0">
+
+            <i class="bi bi-plus-circle-fill me-2"></i>
+
+            Add New Transaction
+
+        </h4>
+
+    </div>
+
+    <div class="card-body p-4">
+
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    {{ form.amount.label(class="form-label fw-semibold") }}
+
+                    {{ form.amount(class="form-control form-control-lg rounded-3") }}
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    {{ form.category.label(class="form-label fw-semibold") }}
+
+                    {{ form.category(class="form-select form-select-lg rounded-3") }}
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    {{ form.transaction_type.label(class="form-label fw-semibold") }}
+
+                    {{ form.transaction_type(class="form-select form-select-lg rounded-3") }}
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    {{ form.date.label(class="form-label fw-semibold") }}
+
+                    {{ form.date(class="form-control form-control-lg rounded-3") }}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <div class="form-check mt-2">
+
+                        {{ form.is_recurring(class="form-check-input") }}
+
+                        {{ form.is_recurring.label(class="form-check-label fw-semibold") }}
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    {{ form.recurrence.label(class="form-label fw-semibold") }}
+
+                    {{ form.recurrence(class="form-select") }}
+
+                </div>
+
+                <div class="col-md-2">
+
+                    {{ form.start_date.label(class="form-label fw-semibold") }}
+
+                    {{ form.start_date(class="form-control") }}
+
+                </div>
+
+                <div class="col-md-2">
+
+                    {{ form.end_date.label(class="form-label fw-semibold") }}
+
+                    {{ form.end_date(class="form-control") }}
+
+                </div>
+
+            </div>
+
+            <div class="text-end mt-4">
+
+                {{ form.submit(class="btn btn-primary btn-lg rounded-pill px-5 shadow") }}
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>               
+
+<hr class="my-5">
+
+<div class="card border-0 shadow-lg">
+
+    <div class="card-header bg-dark text-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h4 class="mb-0">
+                <i class="bi bi-list-ul"></i>
+                Transaction History
+            </h4>
+
+            <span class="badge bg-primary fs-6">
+                {{ transactions.total }} Records
+            </span>
 
         </div>
 
-        <!-- Add Transaction Card -->
-        <div class="card shadow">
+    </div>
 
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">
-                    Add Transaction
-                </h3>
+    <div class="card-body">
+
+        <div class="row mb-4">
+
+            <div class="col-lg-4">
+
+                <input
+                    type="text"
+                    id="searchBox"
+                    class="form-control form-control-lg rounded-pill"
+                    placeholder="🔍 Search Category..."
+                    value="{{ request.args.get('search','') }}">
+
             </div>
 
-            <div class="card-body">
+            <div class="col-lg-8">
 
-                <form method="POST">
+                <form method="GET">
 
-                    {{ form.hidden_tag() }}
+                    <div class="row">
 
-                    <div class="mb-3">
-                        {{ form.amount.label(class="form-label") }}
-                        {{ form.amount(class="form-control") }}
+                        <div class="col-md-3">
+
+                            <select name="category" class="form-select">
+
+                                <option value="">All Categories</option>
+
+                                <option value="Food"
+                                {% if request.args.get('category')=='Food' %}selected{% endif %}>
+                                    Food
+                                </option>
+
+                                <option value="Shopping"
+                                {% if request.args.get('category')=='Shopping' %}selected{% endif %}>
+                                    Shopping
+                                </option>
+
+                                <option value="Travel"
+                                {% if request.args.get('category')=='Travel' %}selected{% endif %}>
+                                    Travel
+                                </option>
+
+                                <option value="Salary"
+                                {% if request.args.get('category')=='Salary' %}selected{% endif %}>
+                                    Salary
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                                type="date"
+                                name="start_date"
+                                value="{{ request.args.get('start_date','') }}"
+                                class="form-control">
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <input
+                                type="date"
+                                name="end_date"
+                                value="{{ request.args.get('end_date','') }}"
+                                class="form-control">
+
+                        </div>
+
+                        <div class="col-md-3 d-grid">
+
+                            <button class="btn btn-primary">
+
+                                <i class="bi bi-funnel-fill"></i>
+
+                                Filter
+
+                            </button>
+
+                        </div>
+
                     </div>
-
-                    <div class="mb-3">
-                        {{ form.category.label(class="form-label") }}
-                        {{ form.category(class="form-select") }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.transaction_type.label(class="form-label") }}
-                        {{ form.transaction_type(class="form-select") }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.date.label(class="form-label") }}
-                        {{ form.date(class="form-control") }}
-                    </div>
-
-                    <hr>
-
-                    <div class="form-check mb-3">
-                        {{ form.is_recurring(class="form-check-input") }}
-                        {{ form.is_recurring.label(class="form-check-label") }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.recurrence.label(class="form-label") }}
-                        {{ form.recurrence(class="form-select") }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.start_date.label(class="form-label") }}
-                        {{ form.start_date(class="form-control") }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.end_date.label(class="form-label") }}
-                        {{ form.end_date(class="form-control") }}
-                    </div>
-
-                    {{ form.submit(class="btn btn-success w-100") }}
 
                 </form>
 
@@ -86,158 +263,120 @@
 
         </div>
 
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>Amount</th>
+
+                        <th>Category</th>
+
+                        <th>Type</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for transaction in transactions.items %}
+
+                    <tr>
+
+                        <td class="fw-bold">
+
+                            ₹{{ "%.2f"|format(transaction.amount) }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-light text-dark px-3 py-2">
+
+                                {{ transaction.category }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {% if transaction.transaction_type.lower()=="income" %}
+
+                            <span class="badge bg-success px-3 py-2">
+
+                                <i class="bi bi-arrow-down-circle-fill"></i>
+
+                                Income
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-danger px-3 py-2">
+
+                                <i class="bi bi-arrow-up-circle-fill"></i>
+
+                                Expense
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ transaction.date }}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="4" class="text-center py-5 text-muted">
+
+                            <i class="bi bi-inbox fs-1"></i>
+
+                            <br><br>
+
+                            No Transactions Found
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
 </div>
 
-<hr class="my-5">
 
-<h3 class="mb-3">
-    Existing Transactions
-</h3>
+<nav class="mt-5">
 
-<!-- SEARCH BAR -->
-<div class="row mb-3">
-
-    <div class="col-md-6">
-
-        <input
-            type="text"
-            id="searchBox"
-            class="form-control"
-            placeholder="🔍 Search Category..."
-            value="{{ request.args.get('search', '') }}">
-
-    </div>
-
-</div>
-
-<!-- FILTER FORM -->
-<form method="GET" class="row g-3 mb-4">
-
-    <div class="col-md-4">
-
-        <label class="form-label">
-            Category
-        </label>
-
-        <select name="category" class="form-select">
-
-            <option value="">All Categories</option>
-
-            <option value="Food"
-                {% if request.args.get('category') == 'Food' %}selected{% endif %}>
-                Food
-            </option>
-
-            <option value="Shopping"
-                {% if request.args.get('category') == 'Shopping' %}selected{% endif %}>
-                Shopping
-            </option>
-
-            <option value="Travel"
-                {% if request.args.get('category') == 'Travel' %}selected{% endif %}>
-                Travel
-            </option>
-
-            <option value="Salary"
-                {% if request.args.get('category') == 'Salary' %}selected{% endif %}>
-                Salary
-            </option>
-
-        </select>
-
-    </div>
-
-    <div class="col-md-3">
-
-        <label class="form-label">
-            Start Date
-        </label>
-
-        <input
-            type="date"
-            name="start_date"
-            value="{{ request.args.get('start_date','') }}"
-            class="form-control">
-
-    </div>
-
-    <div class="col-md-3">
-
-        <label class="form-label">
-            End Date
-        </label>
-
-        <input
-            type="date"
-            name="end_date"
-            value="{{ request.args.get('end_date','') }}"
-            class="form-control">
-
-    </div>
-
-    <div class="col-md-2 d-flex align-items-end">
-
-        <button class="btn btn-primary w-100">
-            Filter
-        </button>
-
-    </div>
-
-</form>
-
-<table class="table table-bordered table-striped table-hover">
-
-    <thead class="table-dark">
-
-        <tr>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Date</th>
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-    {% for transaction in transactions.items %}
-
-        <tr>
-
-            <td>₹{{ "%.2f"|format(transaction.amount) }}</td>
-            <td>{{ transaction.category }}</td>
-            <td>{{ transaction.transaction_type }}</td>
-            <td>{{ transaction.date }}</td>
-
-        </tr>
-
-    {% else %}
-
-        <tr>
-
-            <td colspan="4" class="text-center">
-                No transactions found.
-            </td>
-
-        </tr>
-
-    {% endfor %}
-
-    </tbody>
-
-</table>
-
-<nav class="mt-4">
-
-    <ul class="pagination justify-content-center">
+    <ul class="pagination pagination-lg justify-content-center">
 
         {% if transactions.has_prev %}
 
         <li class="page-item">
 
-            <a class="page-link"
+            <a class="page-link rounded-pill me-2 shadow-sm"
                href="{{ url_for(
                     'transactions.transactions_home',
                     page=transactions.prev_num,
@@ -246,7 +385,9 @@
                     end_date=request.args.get('end_date'),
                     search=request.args.get('search')
                ) }}">
-                Previous
+
+                ← Previous
+
             </a>
 
         </li>
@@ -255,8 +396,12 @@
 
         <li class="page-item active">
 
-            <span class="page-link">
-                {{ transactions.page }}
+            <span class="page-link rounded-pill shadow">
+
+                Page {{ transactions.page }}
+                of
+                {{ transactions.pages }}
+
             </span>
 
         </li>
@@ -265,7 +410,7 @@
 
         <li class="page-item">
 
-            <a class="page-link"
+            <a class="page-link rounded-pill ms-2 shadow-sm"
                href="{{ url_for(
                     'transactions.transactions_home',
                     page=transactions.next_num,
@@ -274,7 +419,9 @@
                     end_date=request.args.get('end_date'),
                     search=request.args.get('search')
                ) }}">
-                Next
+
+                Next →
+
             </a>
 
         </li>
@@ -300,17 +447,43 @@ searchBox.addEventListener("keyup", function () {
         const params = new URLSearchParams(window.location.search);
 
         if (searchBox.value.trim() === "") {
+
             params.delete("search");
+
         } else {
+
             params.set("search", searchBox.value);
+
         }
 
         window.location.search = params.toString();
 
-    }, 400);
+    }, 350);
+
+});
+
+
+// Nice fade animation
+
+document.querySelectorAll(".card").forEach(card => {
+
+    card.addEventListener("mouseenter", () => {
+
+        card.style.transform = "translateY(-6px)";
+
+        card.style.transition = ".25s";
+
+    });
+
+    card.addEventListener("mouseleave", () => {
+
+        card.style.transform = "translateY(0px)";
+
+    });
 
 });
 
 </script>
+
 
 {% endblock %}
